@@ -1,0 +1,46 @@
+{% extends 'base.html.j2' %}
+{% block title %}
+Pokemon
+{% endblock %}
+
+{% block content %}
+
+<h1>Pokemon_Collection</h1>
+<form action="/pokemon" method="POST">
+  <div class="mb-3">
+    <label for="pokemon" class="form-label">Pokemon</label>
+    <input type="text" name="pokemon1" class="form-control" id="pokemon">
+  </div>
+  
+  <div style="color:red"><small>{{error}}</small></div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% if poke %}
+
+  <table class="table table-success table-striped">
+    <thead>
+      <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Ability</th>
+          <th scope="col">Base_experience</th>
+          <th scope="col">Sprites</th>
+          <th scope="col">stats_attack</th>
+          <th scope="col">stats_hp</th>
+          <th scope="col">Stats_defense</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+      <th scope="row">{{poke['name']}}</th>
+          {# <td>{{poke.name}}</td> #}
+          <td>{{poke.ability}}</td>
+          <td>{{poke.base_expereince}}</td>
+          <td>{{poke.sprites}}</td>
+          <td>{{poke.stats_attack}}</td>
+          <td>{{poke.stats_hp}}</td>
+          <td>{{poke.stats_defense}}</td>
+        </tr>
+    </tbody>
+  </table>
+{% endif %}
+{% endblock %}
