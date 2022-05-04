@@ -4,16 +4,20 @@ Pokemon
 {% endblock %}
 
 {% block content %}
-
 <h1>Pokemon_Collection</h1>
-<form action="/pokemon" method="POST">
-  <div class="mb-3">
-    <label for="pokemon" class="form-label">Pokemon</label>
-    <input type="text" name="pokemon1" class="form-control" id="pokemon">
+<form action="{{url_for('pokemon')}}" method="POST">
+  {{form.hidden_tag()}}
+  <div>
+  {{form.pokemon1.label(class="form-label")}}
+  {{form.pokemon1(class="form-control")}}
+  {% for error in form.pokemon1.errors %}
+    <small style="color:red;">{{error}}</small>
+  {% endfor %}
   </div>
-  
-  <div style="color:red"><small>{{error}}</small></div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <br>
+  <div>
+  {{form.submit(class="btn btn-primary form-control")}}
+  </div>
 </form>
 {% if poke %}
 
@@ -35,7 +39,8 @@ Pokemon
           {# <td>{{poke.name}}</td> #}
           <td>{{poke.ability}}</td>
           <td>{{poke.base_expereince}}</td>
-          <td>{{poke.sprites}}</td>
+          
+          <td><img src= {{poke.sprites}}></td>
           <td>{{poke.stats_attack}}</td>
           <td>{{poke.stats_hp}}</td>
           <td>{{poke.stats_defense}}</td>
