@@ -1,31 +1,19 @@
-from flask import Flask, render_template, request
+from flask import render_template, request, flash, redirect, url_for
 import requests
-# from app.forms import LoginForm 
-from app.forms import PokemonForm
+from .forms import LoginForm, RegisterForm
 from app import app
-from wtforms.validators import InputRequired, ValidationError
-
+from .models import User
+from flask_login import current_user, logout_user, login_user, login_required
+from app.forms import LoginForm, PokemonForm
 
 @app.route('/', methods = ['GET'])
+@login_required
 def index():
     return render_template('index.html.j2')
     
 
-# @app.route('/login', methods=['GET','POST'])
-# def login():
-#     form = LoginForm()
-#     if request.method=='POST' and form.validate_on_submit():
-#         email = form.email.data.lower()
-#         password = form.password.data
-#         if email in app.config.get('REGISTERED_USERS') and password == app.config.get('REGISTERED_USERS').get(email).get('password'):
-#             #Login success!!!!!!!!
-#             return f"Login Succes Welcome {app.config.get('REGISTERED_USERS').get(email).get('name')}"
-#         error_string = "Incorrect Email/Password Combo"
-#         return render_template("login.html.j2", error=error_string, form=form)
-
-#     return render_template("login.html.j2", form=form)
-
 @app.route('/pokemon', methods=['GET', 'POST'])
+@login_required
 def pokemon():
     form = PokemonForm()
     
@@ -58,6 +46,47 @@ def pokemon():
         return render_template('pokemon.html.j2', form=form, poke=data)
     return render_template('pokemon.html.j2', form=form)
 
-@app.route('/pokemon_image', methods=['GET', 'POST'])
-def pokemon_image():      
-    pass
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if request.method=='POST' and form.validate_on_submit():
+        email = form.email.data.lower()
+        password = form.password.data
+        u=User.query.filter_by(email=email).first()
+        if u and u.check_hashed_password(password):
+            login_user(u)
+            flash('Welcome to Pokemon Showdown!', 'success')
+            return redirect(url_for("index"))
+        flash('Incorrect Email Password Combo', 'danger')
+        return render_template('login.html.j2', form=form)
+    return render_template("login.html.j2", form=form)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        try:
+            new_user_data={
+                "first_name": form.first_name.data.title(), 
+                "last_name": form.last_name.data.title(), 
+                "email": form.email.data.lower(), 
+                "password": form.password.data
+                }
+            new_user_object = User()
+            new_user_object.from_dict(new_user_data)
+            new_user_object.save()
+        except:
+            flash("There was an unexpected error creating your account. Please try again later", 'danger')
+            return render_template('register.html.j2', form=form)
+        flash('You have successfully registered', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html.j2', form=form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    if current_user:
+        logout_user()
+        flash("you have logged out", 'warning')
+        return redirect(url_for('login'))

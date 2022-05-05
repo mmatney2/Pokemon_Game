@@ -1,3 +1,7 @@
+
 venv/
-__pycashe__/
+__pycache__/
 */__pycache__/
+.env
+*.cfg
+*.pyc
