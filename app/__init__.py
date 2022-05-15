@@ -3,7 +3,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-
+# from flask_moment import Moment
 
 # Init Plug-ins
 login = LoginManager()
@@ -34,5 +34,11 @@ def create_app(config_class=Config):
 
     from .blueprints.auth import bp as auth_bp
     app.register_blueprint(auth_bp)
+
+    # from .blueprints.social import bp as social_bp
+    # app.register_blueprint(social_bp)
+
+    # from .blueprints.api import bp as api_bp
+    # app.register_blueprint(api_bp)
 
     return app

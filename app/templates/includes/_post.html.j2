@@ -1,0 +1,20 @@
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{pokeman.fighter.get_icon_url()}}" class="img-fluid rounded-start" alt="avatar">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{pokeman.first_name}}  stats: </h5>
+        
+        {% if view_all %}
+            <p class="card-text">{{pokeman.from_dict}}</p>
+        {% endif %}
+           
+
+        <small><a href="{{url_for('main.results', id=pokeman.id)}}">View pokeman</a></small>
+      
+        {% if current_user.id == pokeman.fighter.id  %}
+          {# <small><a href="{{url_for('main.delete_pokeman', id=pokeman.id)}}">Delete</a></small> #}
+
+        {% endif %}

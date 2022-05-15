@@ -35,12 +35,6 @@ class RegisterForm(FlaskForm):
         choices=[(r1, r1_img),(r2, r2_img),(r3, r3_img),(r4, r4_img)]
     )
 
-# class PokemonForm(FlaskForm):
-#     pokemon1 = StringField('Pokemon1', validators=[DataRequired()])
-#     submit = SubmitField('Submit')
-#     def validate_pokemon1(form,field):
-#         if len(field.data) > 30:
-#             raise ValidationError('Name must be less than 30 characters.')
 
  ## MUST BE LIKE THIS!!  VALIDATE_FIELDNAME
     def validate_email(form, field):

@@ -5,12 +5,17 @@
   {% else %}
     Register
   {% endif %}
+
+
+    {# {{game_player.users.first_name}}'s Catches #}
 {% endblock %}
 
 {% block content %}
+    {# {% include 'includes/_post.html.j2' %} #}
+
 <h1>
   {% if current_user.is_authenticated %}
-    Pokemon Collection
+    <h1>Caught Pokemon</h1>
   {% else %}
     Register
   {% endif %}
@@ -18,22 +23,41 @@
 <form action="{{url_for('main.pokemon')}}" method="POST">
   {{form.hidden_tag()}}
   <div>
-  {{form.pokemon1.label(class="form-label")}}
-  {{form.pokemon1(class="form-control", value = current_user.pokemon1)}}
+  {{form.poke_name.label(class="form-label")}}
+  {{form.poke_name(class="form-control", value = current_user.poke_name)}}
   {% if error %}<small style="color:red;">{{error}}</small>
   {% endif %}
-  {% for error in form.pokemon1.errors %}
+  {% for error in form.poke_name.errors %}
     <small style="color:red;">{{error}}</small>
   {% endfor %}
   </div>
-  
   <br>
-
   <div>
   {{form.submit(class="btn btn-primary form-control")}}
   </div>
 </form>
-{% if poke %}
+{# form to create post #}
+    <form method="POST" action="{{url_for('main.index')}}">
+        <div class="mb-3">
+        </div>
+    </form>
+    <hr>
+    {# put pokemen here #}
+    {# put pokemen here #}
+    {# {{form.poke_name.label(class="form-label")}}
+  {{form.poke_name(class="form-control", value = current_user.poke_name)}}
+  {% if error %}<small style="color:red;">{{error}}</small>
+  {% endif %}
+  {% for error in form.poke_name.errors %}
+    <small style="color:red;">{{error}}</small>
+  {% endfor %} #}
+    {# {% for poke_name in form.poke_searched.poke_name %}
+        <small style="color:red;">{{poke_name}}</small>
+    {% endfor %} #}
+    {% for pokemen_caught in pokemen_caughts %}
+        {% include './includes/_post.html.j2' %}
+    {% endfor %}
+{% if pokeman %}
 
   <table class="table table-success table-striped">
     <thead>
@@ -45,19 +69,23 @@
           <th scope="col">stats_attack</th>
           <th scope="col">stats_hp</th>
           <th scope="col">Stats_defense</th>
+          <th scope="col">Catch Pokemon</th>
+
+
       </tr>
     </thead>
     <tbody>
       <tr>
-      <th scope="row">{{poke['name']}}</th>
-          {# <td>{{poke.name}}</td> #}
-          <td>{{poke.ability}}</td>
-          <td>{{poke.base_expereince}}</td>
+      <th scope="row">{{pokeman.poke_name}}</th>
+          <td>{{pokeman.ability}}</td>
+          <td>{{pokeman.base_experience}}</td>
           
-          <td><img src= {{poke.sprites}}></td>
-          <td>{{poke.stats_attack}}</td>
-          <td>{{poke.stats_hp}}</td>
-          <td>{{poke.stats_defense}}</td>
+          <td><img src= {{pokeman.sprites}}></td>
+          <td>{{pokeman.stats_attack}}</td>
+          <td>{{pokeman.stats_hp}}</td>
+          <td>{{pokeman.stats_defense}}</td>
+          <td><a href="{{url_for('main.catch_a_poke', poke_name=pokeman.poke_name)}}" class="btn btn-primary"><i class="bi bi-send-fill"></i>&nbsp;Catch!</a></td>
+
         </tr>
     </tbody>
   </table>

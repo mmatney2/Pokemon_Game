@@ -1,0 +1,58 @@
+{% extends 'base.html.j2' %}
+{% block title %}
+Time for Battle
+{% endblock %}
+
+{% block content %}
+<h1>Players</h1>
+<p class="card-text">Please Pick a player to battle</p>
+
+<hr>
+
+{% for user in users %}
+        <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+            <img src="{{user.get_icon_url()}}" class="img-fluid rounded-start" alt="avatar">
+            </div>
+            <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{user.first_name}} {{user.last_name}}</h5>
+                {% if current_user %}
+                <a href="{{url_for('main.attack_player', id=user.id)}}" class="btn btn-primary"><i class="bi bi-send-fill"></i>&nbsp;Attack!</a></td>
+                {% endif %}
+                
+            </div>
+            </div>
+        </div>
+        </div>
+{% endfor %}
+
+
+
+{% for pokeman in pokemans %}
+    {% if current_user %}
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src= {{pokeman.sprites}} class="img-fluid rounded-start" alt="avatar">
+
+            </div>
+            <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{pokeman.poke_name}}</h5>
+                
+                
+                {% if pokemen %}
+          {# <small><a href="{{url_for('main.delete_poke', id=poke.id)}}">Delete</a></small> #}
+                <a href="{{url_for('main.delete_poke', poke_name=pokeman.poke_name)}}" class="btn btn-primary"><i class="bi bi-send-fill"></i>&nbsp;Delete!</a>
+                {% endif %}
+
+            </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
+{% endblock %}
+
