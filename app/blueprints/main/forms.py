@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError
-from ...models import User
+from app.models import User
 
 # from .forms import PokemonForm
 

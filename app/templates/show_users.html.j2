@@ -19,7 +19,7 @@ Time for Battle
             <div class="card-body">
                 <h5 class="card-title">{{user.first_name}} {{user.last_name}}</h5>
                 {% if current_user %}
-                <a href="{{url_for('main.attack_player', id=user.id)}}" class="btn btn-primary"><i class="bi bi-send-fill"></i>&nbsp;Attack!</a></td>
+                <a href="{{url_for('main.catch_a_poke', poke_id=id)}}" class="btn btn-primary"><i class="bi bi-send-fill"></i>&nbsp;Attack!</a></td>
                 {% endif %}
                 
             </div>
@@ -43,10 +43,10 @@ Time for Battle
                 <h5 class="card-title">{{pokeman.poke_name}}</h5>
                 
                 
-                {% if pokemen %}
+                {# {% if pokemen %}
           {# <small><a href="{{url_for('main.delete_poke', id=poke.id)}}">Delete</a></small> #}
-                <a href="{{url_for('main.delete_poke', poke_name=pokeman.poke_name)}}" class="btn btn-primary"><i class="bi bi-send-fill"></i>&nbsp;Delete!</a>
-                {% endif %}
+                {# <a href="{{url_for('main.delete_poke', poke_name=pokeman.poke_name)}}" class="btn btn-primary"><i class="bi bi-send-fill"></i>&nbsp;Delete!</a> #}
+                {% endif %} #}
 
             </div>
             </div>

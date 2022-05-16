@@ -16,11 +16,11 @@ def login():
         u=User.query.filter_by(email=email).first()
         if u and u.check_hashed_password(password):
             login_user(u)
-            flash('Welcome to Pokemon Showdown!', 'success')
-            return redirect(url_for("main.pokemon"))
-        flash('Incorrect Email Password Combo', 'danger')
-        return render_template('login.html.j2', form=form)
-    return render_template("login.html.j2", form=form)
+        flash('Welcome to Pokemon Showdown!', 'success')
+        return redirect(url_for("main.pokemon"))
+    flash('Incorrect Email Password Combo', 'danger')
+    return render_template('login.html.j2', form=form)
+    # return render_template("login.html.j2", form=form)
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():

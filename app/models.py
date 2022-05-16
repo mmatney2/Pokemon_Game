@@ -2,7 +2,9 @@ from app import db, login
 from flask_login import UserMixin # IS ONLY FOR THE USER MODEL!!!!
 from datetime import datetime as dt
 from werkzeug.security import generate_password_hash, check_password_hash
-import secrets
+
+
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -12,24 +14,16 @@ class User(UserMixin, db.Model):
     password =  db.Column(db.String)
     created_on = db.Column(db.DateTime, default=dt.utcnow)
     icon = db.Column(db.Integer)
-    wins = db.Column(db.Integer)
-    losses = db.Column(db.Integer)
-    token = db.Column(db.String, unique=True, default="")
-    pokemen = db.relationship('Pokeman', 
-                    secondary = 'pokemen', #or pokemen
-                    backref = 'owner',
-                    lazy=True)
-
-    def __init__(self, token):
-        token = self.set_token(24)
-
-
-
-
-
-    def collect_poke(self, poke):
-        self.pokemen.append(poke)
-        db.session.commit()
+    wins = db.Column(db.Integer, default=0)
+    losses = db.Column(db.Integer, default=0)
+    pokeman = db.relationship('Pokeman', 
+                    secondary = 'pokemanuser', #or pokemen
+                    backref = 'users',
+                    lazy='dynamic')
+    
+    # def collect_poke(self, poke):
+    #     self.pokemen.append(poke)
+    #     db.session.commit()
 
     
     # should return a unique identifing string
@@ -54,8 +48,6 @@ class User(UserMixin, db.Model):
         self.email=data['email']
         self.password = self.hash_password(data['password'])
         self.icon = data['icon']
-        # self.wins = data['wins']
-        # self.losses = data['losses']
 
     # save the user to the database
     def save(self):
@@ -71,8 +63,14 @@ class User(UserMixin, db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def set_token(self, length):
-        return secret.token_hex(length)
+    def collect_poke(self, pok):
+        self.pokeman.append(pok)
+        db.session.commit()
+
+    def remove_poke(self, pok):
+        self.pokeman.remove(pok)
+        db.session.commit()
+    
 
 
     def get_icon_url(self):
@@ -84,11 +82,11 @@ def load_user(id):
     return User.query.get(int(id))
     # SELECT * FROM user WHERE id = ???
 
+class Pokemanuser(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    poke_id = db.Column(db.Integer, db.ForeignKey('pokeman.poke_id'))
+    id= db.Column(db.Integer, db.ForeignKey('user.id'))
 
-# pokemen = db.Table('pokemen',
-#     db.Column('pokeman_poke_id', db.Integer, db.ForeignKey('pokeman.poke_id')),
-#     db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-# )
 class Pokeman(db.Model):
     poke_id = db.Column(db.Integer, primary_key=True)
     poke_name = db.Column(db.String)
@@ -98,7 +96,6 @@ class Pokeman(db.Model):
     sprites = db.Column(db.String)
     stats_attack=  db.Column(db.Integer)
     stats_defense = db.Column(db.Integer)    
-    user_token = db.Column(db.String, db.ForeignKey('user.token'))
 
     
     
@@ -118,24 +115,19 @@ class Pokeman(db.Model):
         db.session.commit()
 
     def collect_poke(self, pok):
-        self.pokemen.append(pok)
+        self.pokeman.append(pok)
         db.session.commit()
 
-    def attack_a_poke(self, pok):
-        self.pokemen.append(pok)
-        db.session.commit()
-
-    
-
-   
-    def wins(self, pok):
-        self.pokemen.append(pok)
+    def remove_poke(self, pok):
+        self.pokeman.remove(pok)
         db.session.commit()
         
     
-    def losses(self, pok):
-        self.pokemen.append(pok)
-        db.session.commit()
+    #follow a user
+    def losses(self, user):
+        if not self.is_losing(user):
+            self.stats_hp -= 1
+            db.session.commit()
         
 
     

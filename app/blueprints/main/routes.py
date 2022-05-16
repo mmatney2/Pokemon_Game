@@ -3,7 +3,7 @@ import requests
 from .forms import PokemonForm
 from .import bp as main
 from flask_login import login_required, current_user
-from ...models import Pokeman, User
+from ...models import Pokeman, User, Pokemanuser
 
 
 @main.route('/', methods = ['GET'])
@@ -22,21 +22,28 @@ def catch_a_poke(poke_name):
 
 @main.route('/show_users')
 def show_users():
-    poke1 = Pokeman.query.filter().all()
+    pokemans = Pokeman.query.filter().all()
     users=User.query.filter(User.id != current_user.id).all()
     
-    return render_template('show_users.html.j2',  users=users,  poke1=poke1, view_all=True)
+    return render_template('show_users.html.j2',  users=users, pokemans=pokemans,  view_all=True)
+
+# @main.route('/show_users')
+# def results():
+#     poke1 = Pokeman.query.filter().all()
+#     users=User.query.filter(User.id != current_user.id).all()
+#     wins=
+
 
 #attack
-@main.route('/attack/<int:id>')
-def attack_player(id):
-    # print(id)
-    attack_poke = User.query.filter(pokemen==id).all()
-    # print(attack_poke)
-    for poke in attack_poke:
-        print(poke)
+# @main.route('/attack/<int:id>')
+# def attack_player(id):
+#     # print(id)
+#     # attack_poke = User.query.filter(pokemen==id).all()
+#     # print(attack_poke)
+#     # for poke in attack_poke:
+#     #     print(poke)
 
-        return render_template('results.html.j2', attack_poke=attack_poke, view_all=True)
+#         return render_template('results.html.j2',  view_all=True)
 
 
     # current_user.attack_a_poke(attack_poke)
@@ -53,24 +60,24 @@ def attack_player(id):
 #     flash(f"YOU WON against {user.first_name} {user.last_name} ", "success")
 #     return render_template('results.html.j2', user=user)
     
-@main.route('/delete_poke/<int:id>')
-def delete_poke(id):
-    pokemans = Pokeman.query.filter.get(id)
-    current_user.delete(pokemans)
+# @main.route('/delete_poke/<int:id>')
+# def delete_poke(id):
+#     pokemans = Pokeman.query.filter.get(id)
+#     current_user.delete(pokemans)
 
 
 
 
 #results of battle/winner/loser/displyed on results page
-@main.route('/results')
-@login_required
-def results(id):
-    user = Pokeman.query.get(id)
-    if current_user['stats_hp'] <= user['stats_hp']:
-        data=Pokeman()
-        print(data)
-        data.save
-        return render_template('show_users.html.j2', user=user, view_all=True)    
+# @main.route('/results')
+# @login_required
+# def results(id):
+#     user = Pokeman.query.get(id)
+#     if current_user['stats_hp'] <= user['stats_hp']:
+#         data=Pokeman()
+#         print(data)
+#         data.save
+#         return render_template('show_users.html.j2', user=user, view_all=True)    
 
     
 @main.route('/pokemon', methods=['GET', 'POST'])
