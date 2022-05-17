@@ -123,11 +123,7 @@ class Pokeman(db.Model):
         db.session.commit()
         
     
-    #follow a user
-    def losses(self, user):
-        if not self.is_losing(user):
-            self.stats_hp -= 1
-            db.session.commit()
+   
         
 
     
@@ -140,9 +136,4 @@ class Pokeman(db.Model):
         self.stats_hp=data['stats_hp']
         self.stats_defense=data['stats_defense']
 
-    # def attack(self):
-    #     if Pokeman.stats_attack > Pokeman.stats_attack:
-    # def results(self, pokeman):
-    #     if self.stats_hp.user < self.stats_hp.current_user.id:
-    #         pokeman.delete()
-    #         db.session.commit()
+    

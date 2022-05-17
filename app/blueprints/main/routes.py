@@ -16,70 +16,51 @@ def index():
 def catch_a_poke(poke_name):
     poke_to_catch = Pokeman.query.filter_by(poke_name=poke_name).first()
     current_user.collect_poke(poke_to_catch)
-    print(poke_to_catch)
     flash("Congrats you caught a pokemon!", 'primary')
     return redirect(url_for('main.pokemon'))
 
 @main.route('/show_users')
+@login_required
 def show_users():
-    pokemans = Pokeman.query.filter().all()
     users=User.query.filter(User.id != current_user.id).all()
+    return render_template('show_users.html.j2',  users=users, view_all=True)
+
+
+@main.route('/poke_team')
+@login_required
+def poke_team():
+    pokemans = Pokeman.query.filter_by().all()
+    users=User.query.filter(User.id != current_user.id).all()
+
+    return render_template('poke_team.html.j2', users=users, pokemans=pokemans,  view_all=True)
+
+@main.route('/attack/<int:id>')
+@login_required
+def attack_player(id):  
     
-    return render_template('show_users.html.j2',  users=users, pokemans=pokemans,  view_all=True)
+    user_to_attack=User.query.get(id) 
+    ps = user_to_attack.pokeman
+    cs = current_user.pokeman
+    p_total = 0
+    c_total = 0
+    for p in ps:
+        p_total += p.stats_hp
+    for c in cs:
+        c_total += c.stats_hp
+    if p_total < c_total:
+        print("you win")
+    if p_total > c_total:
+        print("you lose")
+    return redirect(url_for('main.poke_team'))
 
-# @main.route('/show_users')
-# def results():
-#     poke1 = Pokeman.query.filter().all()
-#     users=User.query.filter(User.id != current_user.id).all()
-#     wins=
+@main.route('/pokemon/<int:id>')
+@login_required
+def delete_poke(id):
+    poke_to_remove = Pokeman.query.filter(id)
+    current_user.remove_poke(poke_to_remove)
+    flash("You removed a Pokemon!", 'warning')
+    return redirect(url_for('main.poke_team'))
 
-
-#attack
-# @main.route('/attack/<int:id>')
-# def attack_player(id):
-#     # print(id)
-#     # attack_poke = User.query.filter(pokemen==id).all()
-#     # print(attack_poke)
-#     # for poke in attack_poke:
-#     #     print(poke)
-
-#         return render_template('results.html.j2',  view_all=True)
-
-
-    # current_user.attack_a_poke(attack_poke)
-
-    # count_wins=User.query.filter_by(wins=wins)
-    # current_user.wins(count_wins)
-
-
-# #put att func here/calc who wins and update database who won, update win count
-#     if current_user.stats_hp < User.stats_hp:
-#         current_user.save()
-#         flash(f"You lost against {user.first_name} {user.last_name} ", "danger")
-#         return render_template('results.html.j2', user=user)
-#     flash(f"YOU WON against {user.first_name} {user.last_name} ", "success")
-#     return render_template('results.html.j2', user=user)
-    
-# @main.route('/delete_poke/<int:id>')
-# def delete_poke(id):
-#     pokemans = Pokeman.query.filter.get(id)
-#     current_user.delete(pokemans)
-
-
-
-
-#results of battle/winner/loser/displyed on results page
-# @main.route('/results')
-# @login_required
-# def results(id):
-#     user = Pokeman.query.get(id)
-#     if current_user['stats_hp'] <= user['stats_hp']:
-#         data=Pokeman()
-#         print(data)
-#         data.save
-#         return render_template('show_users.html.j2', user=user, view_all=True)    
-
-    
 @main.route('/pokemon', methods=['GET', 'POST'])
 @login_required
 def pokemon():
