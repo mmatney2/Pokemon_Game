@@ -19,7 +19,7 @@ Time for Battle
             <div class="card-body">
                 <h5 class="card-title">{{pokeman.poke_name}}</h5>
                 <h5 class="card-title">{{user.first_name}}</h5>
-
+                <h5>wins: {{user.wins}}</h5> 
                 {# {% if user %} #}
                 <a href="{{url_for('main.delete_poke', id=pokeman.poke_id)}}" class="btn btn-primary"><i class="bi bi-send-fill"></i>&nbsp;Delete!</a> 
                 {# {% endif %} #}

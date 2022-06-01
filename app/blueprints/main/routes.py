@@ -56,7 +56,7 @@ def attack_player(id):
 @main.route('/pokemon/<int:id>')
 @login_required
 def delete_poke(id):
-    poke_to_remove = Pokeman.query.filter(id)
+    poke_to_remove = Pokeman.query.filter_by(poke_id=id).all()
     current_user.remove_poke(poke_to_remove)
     flash("You removed a Pokemon!", 'warning')
     return redirect(url_for('main.poke_team'))
